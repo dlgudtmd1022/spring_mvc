@@ -64,19 +64,23 @@ public class ScoreController {
     }
     // 3. 성적 정보 삭제 요청
     @PostMapping("/remove")
-    public String remove(){
+    public String remove(int studentNumber){
         System.out.println("/score/remove : POST방식");
-        return "";
+        System.out.println("전달받은 학번 : " + studentNumber);
+        // 글 삭제 후 list페이지로 넘어가도록 아래 코드를 작성하고 수정해주세요,
+        repository.deleteByStudentNumber(studentNumber);
+        return "redirect:/score/list";
     }
 
     // 2. 성적정보 상세 요청
     @GetMapping("/detail")
-    public String detail(int studentNumber){
+    public String detail(int studentNumber, Model model){
         System.out.println("/score/detail : GET방식");
         System.out.println("전달받은 studentNumber : " + studentNumber);
         // 래포지토리에서 Score객체를 받아서 저장하고.jsp파일로 보낼수 있게 적재
         Score score = repository.findByStudentNumber(studentNumber);
         System.out.println("위 번호로 가져온 학생 정보 :" + score);
+        model.addAttribute("score", score);
         // /WEB-INF/views/chap04/detail
         return "chap04/detail";
     }
